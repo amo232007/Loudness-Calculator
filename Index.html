@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel = "icon" href = "https://i.postimg.cc/cJYypgTw/Loudness-Calculator.png">
+    <base target="_top">
+    <style>
+      body 
+      {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        max-width: 400px;
+      }
+
+      input 
+      {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0 20px 0;
+        box-sizing: border-box;
+      }
+
+      button 
+      {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button:hover 
+      {
+        background-color: #45a049;
+      }
+
+      #result 
+      {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+      
+      /* Mobile Responsivness */
+      @media (max-width: 768px) 
+      {
+        input, select, textarea { padding: 12px; font-size: 16px; } /* Kept at 16px to prevent iOS auto-zoom! */
+        button { padding: 14px; font-size: 16px; } 
+        .action-btn { padding: 12px; font-size: 15px; }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Loudness Calculator</h2>
+    <label for="minInput">Minimum loudness in dBFS:</label>
+    <input type="number" id="minInput" step="any" placeholder="e.g. -10 dBFS">
+    <label for="maxInput">Maximum loudness in dBFS:</label>
+    <input type="number" id="maxInput" step="any" placeholder="e.g. 0.8 dBFS">
+    <button onclick="calculate()">Calculate Average</button>
+    <div id="result"></div>
+    <script>
+      function calculate() 
+      {
+        /* Getting the numbers from the input boxes */
+        var min = parseFloat(document.getElementById('minInput').value);
+        var max = parseFloat(document.getElementById('maxInput').value);
+        /* Making sure that they actually typed numbers */
+        if (isNaN(min) || isNaN(max)) 
+        {
+          document.getElementById('result').innerText = "Error: Please enter valid numbers.";
+          return;
+        }
+        document.getElementById('result').innerText = "Calculating...";
+        /* Send the numbers back to your Code.gs file to do the math */
+        google.script.run
+          .withSuccessHandler(function(average) 
+          {
+            // This runs when Code.gs finishes the math and sends the answer back
+            document.getElementById('result').innerText = "Average loudness: " + average + " dB RMS";
+          })
+          .LoudnessCalculator(min, max);
+      }
+    </script>
+  </body>
+</html>
